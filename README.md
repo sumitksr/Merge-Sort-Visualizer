@@ -29,7 +29,7 @@ Merge Sort is a **divide-and-conquer** algorithm that splits an array into two h
 1. Clone this repository:
    ```bash
    git clone https://github.com/sumitksr/Merge-Sort-Visualizer.git
-   cd Merge-Sort
+   cd Merge-Sort-Visualizer
 2. Compile the program:
    ```bash
    g++ merge_sort.cpp -o merge_sort
