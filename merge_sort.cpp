@@ -1,84 +1,83 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
+void printArray(const vector<int>& arr, int left, int right) {
+    cout << "[";
+    for (int i = left; i <= right; ++i) {
+        cout << arr[i];
+        if (i < right) cout << ", ";
+    }
+    cout << "]" << endl;
+}
+
 void merge(vector<int>& arr, int left, int mid, int right) {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
-    
-    vector<int> leftArr(n1);
-    vector<int> rightArr(n2);
+    vector<int> temp;
+    int i = left, j = mid + 1;
 
-    for (int i = 0; i < n1; i++) {
-        leftArr[i] = arr[left + i];
-    }
-    for (int j = 0; j < n2; j++) {
-        rightArr[j] = arr[mid + 1 + j];
-    }
-
-    int i = 0, j = 0, k = left;
-
-    while (i < n1 && j < n2) {
-        if (leftArr[i] <= rightArr[j]) {
-            arr[k] = leftArr[i];
-            i++;
+    while (i <= mid && j <= right) {
+        if (arr[i] <= arr[j]) {
+            temp.push_back(arr[i++]);
         } else {
-            arr[k] = rightArr[j];
-            j++;
+            temp.push_back(arr[j++]);
         }
-        k++;
     }
 
-    while (i < n1) {
-        arr[k] = leftArr[i];
-        i++;
-        k++;
+    while (i <= mid) temp.push_back(arr[i++]);
+    while (j <= right) temp.push_back(arr[j++]);
+
+    for (int k = 0; k < temp.size(); ++k) {
+        arr[left + k] = temp[k];
     }
 
-    while (j < n2) {
-        arr[k] = rightArr[j];
-        j++;
-        k++;
-    }
+    cout << "Merging: ";
+    printArray(arr, left, right);
 }
 
+// Merge sort function
 void mergeSort(vector<int>& arr, int left, int right) {
-    if (left >= right) {
-        return;
-    }
+    if (left < right) {
+        int mid = left + (right - left) / 2;
 
-    int mid = left + (right - left) / 2;
-    mergeSort(arr, left, mid);
-    mergeSort(arr, mid + 1, right);
-    merge(arr, left, mid, right);
-}
+        // Split and sort the left half
+        mergeSort(arr, left, mid);
+        
+        // Split and sort the right half
+        mergeSort(arr, mid + 1, right);
 
-void printArray(const vector<int>& arr) {
-    for (int num : arr) {
-        cout << num << " ";
+        // Print the current division
+        cout << "Dividing: ";
+        printArray(arr, left, right);
+
+        // Merge the two halves
+        merge(arr, left, mid, right);
     }
-    cout << endl;
 }
 
 int main() {
+    vector<int> arr;
     int n;
+
     cout << "Enter the number of elements: ";
     cin >> n;
 
-    vector<int> arr(n);
-    cout << "Enter " << n << " elements: ";
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
+    cout << "Enter the elements: ";
+    for (int i = 0; i < n; ++i) {
+        int x;
+        cin >> x;
+        arr.push_back(x);
     }
 
-    cout << "Original array: ";
-    printArray(arr);
+    cout << "\nInitial array: ";
+    printArray(arr, 0, arr.size() - 1);
 
+    // Start merge sort
     mergeSort(arr, 0, arr.size() - 1);
 
-    cout << "Sorted array: ";
-    printArray(arr);
+    cout << "\nSorted array: ";
+    printArray(arr, 0, arr.size() - 1);
 
     return 0;
 }
